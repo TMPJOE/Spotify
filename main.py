@@ -2,11 +2,13 @@ import kagglehub
 import os
 import pandas as pd
 import numpy as np # Importamos numpy para cálculos
+import csv
 
 # --- Setup y Descarga (sin cambios) ---
 
 # Set custom cache directory
-os.environ['KAGGLEHUB_CACHE'] = 'C:/Users/josed/Documents/Code/Python/Spotify/data_cache/kagglehub_cache/datasets'
+# C:/Users/josed/Documents/Code/Python/Spotify/data_cache/kagglehub_cache/datasets
+os.environ['KAGGLEHUB_CACHE'] = 'C:/temporal'
 # Download latest version
 path = kagglehub.dataset_download("asaniczka/top-spotify-songs-in-73-countries-daily-updated")
 print("Path to dataset files:", path)
@@ -45,7 +47,7 @@ df_Stats = df[['spotify_id', 'snapshot_date', 'daily_rank', 'daily_movement', 'w
 # -----------------------------------------------------
 
 # Define el porcentaje de estadísticas a MANTENER (por ejemplo, 0.5 para 50%)
-reduction_percentage = 0.41
+reduction_percentage = 1
 
 # Usamos la función 'groupby()' y 'sample()' para reducir equitativamente
 # El parámetro 'frac' define la fracción de filas a seleccionar por cada grupo ('spotify_id')
@@ -67,10 +69,18 @@ print("Total unique songs after cleaning (Stats):", unique_songs_stats)
 
 
 # Guardamos df_Info (sin cambios)
-df_Info.to_csv(os.path.join(path, 'spotify_songs_info.csv'), index=False)
+df_Info.to_csv(
+    os.path.join(path, 'spotify_songs_info.csv'),
+    index=False,
+    quoting=csv.QUOTE_ALL
+)
 
 # Guardamos df_Stats REDUCIDO
-df_Stats_reduced.to_csv(os.path.join(path, 'spotify_songs_stats.csv'), index=False)
+df_Stats_reduced.to_csv(
+    os.path.join(path, 'spotify_songs_stats.csv'),
+    index=False,
+    quoting=csv.QUOTE_ALL
+)
 
 print("\nArchivos guardados:")
 print("- spotify_songs_info.csv (sin reducción)")
